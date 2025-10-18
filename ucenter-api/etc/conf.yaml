@@ -6,3 +6,8 @@ UCenterRpc:
     Hosts:
       - 127.0.0.1:2379
     Key: ucenter.rpc
+Mysql:
+  DataSource: root:root@tcp(127.0.0.1:3306)/mscoin?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Type: root

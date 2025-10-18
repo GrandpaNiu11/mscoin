@@ -1,4 +1,4 @@
-package mscoin_common
+package common
 
 type BizCode int
 
