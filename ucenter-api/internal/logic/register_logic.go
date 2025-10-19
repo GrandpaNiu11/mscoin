@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
 	"grpc-common/ucenter/types/register"
 	"time"
 	"ucenter-api/internal/svc"
@@ -27,7 +28,11 @@ func NewUcenterapiLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Regist
 func (l *RegisterLogic) Register(req *types.Request) (resp *types.Response, err error) {
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelFunc()
-	l.svcCtx.UCRegisterRpc.RegisterByPhone(ctx, &register.RegReq{})
+	regReq := &register.RegReq{}
+	if err := copier.Copy(regReq, req); err != nil {
+		return nil, err
+	}
+	l.svcCtx.UCRegisterRpc.RegisterByPhone(ctx, regReq)
 	if err != nil {
 		return nil, err
 	}

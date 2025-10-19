@@ -8,4 +8,14 @@ import (
 type Config struct {
 	zrpc.RpcServerConf
 	CacheRedis cache.CacheConf
+	Mysql      MysqlConfig
+	Captcha    CaptchaConf
+}
+type CaptchaConf struct {
+	Vid string
+	Key string
+}
+
+type MysqlConfig struct {
+	DataSource string
 }

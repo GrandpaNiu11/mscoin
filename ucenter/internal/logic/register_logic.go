@@ -6,6 +6,7 @@ import (
 	"grpc-common/ucenter/types/register"
 	"mscoin-common/tools"
 	"time"
+	"ucenter/internal/domain"
 	"ucenter/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -17,19 +18,31 @@ type RegisterLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
+	CaptchaDomain *domain.CaptchaDomain
 }
 
 func NewRegisterByPhoneLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
 	return &RegisterLogic{
-		ctx:    ctx,
-		svcCtx: svcCtx,
-		Logger: logx.WithContext(ctx),
+		ctx:           ctx,
+		svcCtx:        svcCtx,
+		Logger:        logx.WithContext(ctx),
+		CaptchaDomain: domain.NewCaptchaDomain(),
 	}
 }
 
 func (l *RegisterLogic) RegisterByPhone(in *register.RegReq) (*register.RegRes, error) {
 	// todo: add your logic here and delete this line
 	logx.Info("我被调用了")
+	//先交给人机是否通过
+	isVerify := l.CaptchaDomain.Verifiy(
+		in.Captcha.Server,
+		l.svcCtx.Config.Captcha.Vid,
+		l.svcCtx.Config.Captcha.Key,
+		in.Captcha.Token, 2, in.Ip)
+	if !isVerify {
+		return nil, errors.New("人机校验不通过")
+	}
+	logx.Info("人机校验通过....")
 	return &register.RegRes{}, nil
 }
 

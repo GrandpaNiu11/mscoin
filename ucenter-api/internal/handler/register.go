@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 	common "mscoin-common"
+	"mscoin-common/tools"
 
 	"net/http"
 	"ucenter-api/internal/logic"
@@ -22,10 +23,13 @@ func NewRegisterHandler(svcCtx *svc.ServiceContext) *RegisterHandler {
 
 func (h *RegisterHandler) Register(w http.ResponseWriter, r *http.Request) {
 	var req types.Request
-	//if err := httpx.Parse(r, &req); err != nil {
-	//	httpx.ErrorCtx(r.Context(), w, err)
-	//	return
-	//}
+	if err := httpx.ParseJsonBody(r, &req); err != nil {
+		httpx.ErrorCtx(r.Context(), w, err)
+		return
+	}
+	//获取ip
+	ip := tools.GetRemoteClientIp(r)
+	req.Ip = ip
 	l := logic.NewUcenterapiLogic(r.Context(), h.svcCtx)
 	resp, error := l.Register(&req)
 	result := common.NewResult().Deal(resp, error)

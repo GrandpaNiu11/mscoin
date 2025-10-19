@@ -9,6 +9,3 @@ type Config struct {
 	rest.RestConf
 	UCenterRpc zrpc.RpcClientConf
 }
-
-type MysqlConfig struct {
-}
