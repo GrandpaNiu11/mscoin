@@ -26,3 +26,7 @@ func (s *RegisterServer) RegisterByPhone(ctx context.Context, in *register.RegRe
 	l := logic.NewRegisterByPhoneLogic(ctx, s.svcCtx)
 	return l.RegisterByPhone(in)
 }
+func (s *RegisterServer) SendCode(ctx context.Context, in *register.CodeReq) (*register.NogRes, error) {
+	l := logic.NewRegisterByPhoneLogic(ctx, s.svcCtx)
+	return l.SendCode(in)
+}

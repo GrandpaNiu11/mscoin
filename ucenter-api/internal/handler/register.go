@@ -26,10 +26,20 @@ func (h *RegisterHandler) Register(w http.ResponseWriter, r *http.Request) {
 	//	httpx.ErrorCtx(r.Context(), w, err)
 	//	return
 	//}
-
 	l := logic.NewUcenterapiLogic(r.Context(), h.svcCtx)
 	resp, error := l.Register(&req)
 	result := common.NewResult().Deal(resp, error)
 	httpx.OkJsonCtx(r.Context(), w, result)
+}
 
+func (h *RegisterHandler) SendCode(w http.ResponseWriter, r *http.Request) {
+	var req types.CodeRequest
+	if err := httpx.ParseJsonBody(r, &req); err != nil {
+		httpx.ErrorCtx(r.Context(), w, err)
+		return
+	}
+	l := logic.NewUcenterapiLogic(r.Context(), h.svcCtx)
+	resp, error := l.SendCode(&req)
+	result := common.NewResult().Deal(resp, error)
+	httpx.OkJsonCtx(r.Context(), w, result)
 }

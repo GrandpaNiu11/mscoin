@@ -9,7 +9,8 @@ import (
 
 func RegisterHandlers(server *Routers, serverCtx *svc.ServiceContext) {
 	register := NewRegisterHandler(serverCtx)
-	registerRouter := server.Group()
-	registerRouter.Get("/uc/register/phone", register.Register)
+	registerGroup := server.Group()
+	registerGroup.Get("/uc/register/phone", register.Register)
+	registerGroup.Post("/uc/mobile/code", register.SendCode)
 
 }

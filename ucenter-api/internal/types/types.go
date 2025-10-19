@@ -10,3 +10,11 @@ type Request struct {
 type Response struct {
 	Message string `json:"message"`
 }
+
+type CodeRequest struct {
+	Phone   string `json:"phone"`   // 正确
+	Country string `json:"country"` // 正确
+}
+
+type CodeResPonse struct {
+}

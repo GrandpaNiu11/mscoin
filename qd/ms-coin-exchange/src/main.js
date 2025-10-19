@@ -23,7 +23,7 @@ Vue.use(VueRouter);
 Vue.use(vueResource);
 Vue.use(VueI18n);
 
-Vue.prototype.host = "http://localhost"; //MSCOIN https://www.MSZLU.COM
+Vue.prototype.host = "http://localhost:8888"; //MSCOIN https://www.MSZLU.COM
 Vue.prototype.wshost = "ws://localhost"; 
 Vue.prototype.api = Api;
 Vue.http.options.credentials = true;

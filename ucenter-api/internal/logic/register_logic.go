@@ -25,7 +25,6 @@ func NewUcenterapiLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Regist
 }
 
 func (l *RegisterLogic) Register(req *types.Request) (resp *types.Response, err error) {
-	// todo: add your logic here and delete this line
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelFunc()
 	l.svcCtx.UCRegisterRpc.RegisterByPhone(ctx, &register.RegReq{})
@@ -33,6 +32,19 @@ func (l *RegisterLogic) Register(req *types.Request) (resp *types.Response, err 
 		return nil, err
 	}
 	logx.Info("register logic")
+	return
+}
 
+func (l *RegisterLogic) SendCode(res *types.CodeRequest) (resp *types.Response, err error) {
+	ctx, cancelFunc := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelFunc()
+	l.svcCtx.UCRegisterRpc.SendCode(ctx, &register.CodeReq{
+		Phone:   res.Phone,
+		Country: res.Country,
+	})
+	if err != nil {
+		return nil, err
+	}
+	logx.Info("register logic")
 	return
 }
