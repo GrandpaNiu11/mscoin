@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/jinzhu/copier"
 	"grpc-common/ucenter/types/login"
+	"mscoin-common/tools"
 
 	"time"
 	"ucenter-api/internal/svc"
@@ -44,4 +45,13 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 	}
 	logx.Info("Login logic")
 	return
+}
+
+func (l *LoginLogic) CheckLogin(token string) (bool, error) {
+	_, err := tools.ParseToken(token, l.svcCtx.Config.JWT.AccessSecret)
+	if err != nil {
+		return false, nil
+	}
+	return true, nil
+
 }

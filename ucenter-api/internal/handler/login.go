@@ -35,3 +35,12 @@ func (h *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 	result := common.NewResult().Deal(resp, error)
 	httpx.OkJsonCtx(r.Context(), w, result)
 }
+
+func (h *LoginHandler) chackLogin(w http.ResponseWriter, r *http.Request) {
+	result := common.NewResult()
+	tolen := r.Header.Get("x-auth-token")
+	l := logic.NewLoginLogic(r.Context(), h.svcCtx)
+	flag, _ := l.CheckLogin(tolen)
+	result = common.NewResult().Deal(flag, nil)
+	httpx.OkJsonCtx(r.Context(), w, result)
+}
