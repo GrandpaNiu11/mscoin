@@ -53,6 +53,14 @@ func (d *MemberDomain) Register(
 	return nil
 }
 
+func (d MemberDomain) UpdateLoginCount(ctx context.Context, id int64, step int) {
+	err := d.MemberRepo.UpdateLoginCount(ctx, id, step)
+	if err != nil {
+		logx.Error(err)
+	}
+
+}
+
 func NewMemberDomain(db *msdb.MsDB) *MemberDomain {
 	return &MemberDomain{
 		MemberRepo: dao.NewMemberDao(db),
