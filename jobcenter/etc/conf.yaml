@@ -3,3 +3,8 @@ okx:
   SecretKey: "004148A48D9335E147963C6F5B9C4E63"
   Pass: "Mszlu!@#$56789"
   Host: "https://www.okx.com"
+Mongo:
+  Url: "mongodb://localhost:27018"
+  Username: "root"
+  Password: "root123456"
+  Database: "mscoin"

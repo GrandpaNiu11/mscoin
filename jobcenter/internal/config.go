@@ -1,7 +1,11 @@
 package config
 
-import "jobcenter/kline"
+import (
+	"jobcenter/database"
+	"jobcenter/kline"
+)
 
 type Config struct {
-	Okx kline.OkxConfig
+	Okx   kline.OkxConfig
+	Mongo database.MongoConfig
 }

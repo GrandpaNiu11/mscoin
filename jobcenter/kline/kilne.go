@@ -2,6 +2,8 @@ package kline
 
 import (
 	"encoding/json"
+	"jobcenter/database"
+	"jobcenter/domain"
 	"log"
 	"mscoin-common/tools"
 	"sync"
@@ -16,8 +18,9 @@ type OkxConfig struct {
 }
 
 type kline struct {
-	wg sync.WaitGroup
-	c  OkxConfig
+	wg          sync.WaitGroup
+	c           OkxConfig
+	KlineDomain *domain.KlineDomain
 }
 type OkxKlineRes struct {
 	Code string     `json:"code"`
@@ -28,13 +31,13 @@ type OkxKlineRes struct {
 func (k *kline) Do(period string) {
 	log.Println("============启动k线数据拉取==============")
 	k.wg.Add(2)
-	go k.syncToMongo("BTC-USDT", period)
-	go k.syncToMongo("ETH-USDT", period)
+	go k.syncToMongo("BTC-USDT", "BTC/USDT", period)
+	go k.syncToMongo("ETH-USDT", "ETH/USDT", period)
 	k.wg.Wait()
 	log.Println("===============k线数据拉取结束===============")
 }
 
-func (k *kline) syncToMongo(instId string, period string) {
+func (k *kline) syncToMongo(instId string, symbol string, period string) {
 	// ✅ 正确：添加完整的 URL
 	api := k.c.Host + "/api/v5/market/candles?instId=" + instId + "&bar=" + period
 
@@ -66,11 +69,17 @@ func (k *kline) syncToMongo(instId string, period string) {
 	log.Println("==============获取到的k线数据============")
 	log.Println("instId:", instId, "period", period)
 	log.Println("result:", string(resp))
+	log.Println("==========执行存储===================")
+	if result.Code == "0" {
+		//代表成功
+		k.KlineDomain.SaveBeath(result.Data, symbol, period)
+	}
 	k.wg.Done()
 }
 
-func NewKline(c OkxConfig) *kline {
+func NewKline(c OkxConfig, client *database.MongoClient) *kline {
 	return &kline{
-		c: c,
+		c:           c,
+		KlineDomain: domain.NewKlineDomain(client),
 	}
 }
